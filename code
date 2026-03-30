@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+
+// ERC-20 minimal pour FidesCoin (rewards composables)
+contract FidesCoin {
+    string public constant name = "FidesCoin";
+    string public constant symbol = "FDC";
+    uint8 public constant decimals = 18;
+    uint256 public totalSupply;
+    mapping(address => uint256) public balanceOf;
+
+    function mint(address to, uint256 amount) external onlyOwner {
+        totalSupply += amount;
+        balanceOf += amount;
+    }
+}
+
+contract CognitiveBackupLedger_FidesMAURIN is Ownable, ERC721URIStorage, ReentrancyGuard {
+    using ECDSA for bytes32;
+
+    address public immutable founder = 0x2d37BF7E0619C97373435179Bd2428B5A62319e4;
+    FidesCoin public fidesCoin; // Rewards composables
